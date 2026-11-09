@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account History</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #34495e; color: white; }
+        .status-SUCCESS { color: green; font-weight: bold; }
+        .status-FAILED { color: red; font-weight: bold; }
+        .back-link { display: inline-block; margin-bottom: 15px; color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="/" class="back-link">&larr; Back to Dashboard</a>
+    <h1 th:text="${'Transaction History for ' + customer.fullName}"></h1>
+    <p><strong>Account Number:</strong> <span th:text="${customer.accountNumber}"></span></p>
+    <p><strong>Current Balance:</strong> LKR <span th:text="${#numbers.formatDecimal(customer.balance, 1, 'COMMA', 2, 'POINT')}"></span></p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>From Account</th>
+            <th>To Account</th>
+            <th>Amount (LKR)</th>
+            <th>Date & Time</th>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${history}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.fromAccount}"></td>
+            <td th:text="${t.toAccount}"></td>
+            <td th:text="${#numbers.formatDecimal(t.amount, 1, 'COMMA', 2, 'POINT')}"></td>
+            <td th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <span th:class="${'status-' + t.status}" th:text="${t.status}"></span>
+            </td>
+            <td th:text="${t.description}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
